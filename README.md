@@ -37,6 +37,10 @@ Below list of assumptions that were taken into consideration during development:
 2. Discount policies will not hold new values after restart
 3. Usage of only one discount policy is permitted per calculation
 4. Amount based discount policy has a configurable threshold of the maximum percentage discount
+5. If no policy type is provided in request, the calculation does not include any discount
+6. Default values for policies: 
+    - Amount based policy: Max Discount - 25%, discount increment per item - 0.5%
+    - Percentage based policy: Base percentage - 20%
 
 
 ## Additional Info
