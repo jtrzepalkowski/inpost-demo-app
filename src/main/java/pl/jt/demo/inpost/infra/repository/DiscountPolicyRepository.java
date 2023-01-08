@@ -1,6 +1,7 @@
 package pl.jt.demo.inpost.infra.repository;
 
-import org.springframework.stereotype.Repository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import pl.jt.demo.inpost.domain.AmountBasedDiscountPolicy;
 import pl.jt.demo.inpost.domain.DiscountPolicy;
 import pl.jt.demo.inpost.domain.PercentageBasedDiscountPolicy;
@@ -11,7 +12,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-@Repository
+@Component
+@Slf4j
 public class DiscountPolicyRepository {
 
     private static Map<PolicyType, DiscountPolicy> discountPolicyMap;
@@ -28,44 +30,78 @@ public class DiscountPolicyRepository {
         discountPolicyMap.put(PolicyType.PERCENTAGE_BASED, PercentageBasedDiscountPolicy.builder()
                 .percentageDiscount(BigDecimal.valueOf(20))
                 .build());
+
+        log.info("""
+                Created two discount policies with default values.
+                Amount based: max discount = 25%, step per item 0.5%.
+                Percentage based: discount = 20%.
+                """);
     }
 
-    public static DiscountPolicy getDiscountPolicyByType(PolicyType policyType) {
+    public DiscountPolicy getDiscountPolicyByType(PolicyType policyType) {
 
         return discountPolicyMap.get(policyType);
     }
 
-    public static void updatePolicy(PolicyType policyType, BigDecimal... updatedDiscountPolicyValues) {
+    public DiscountPolicy updatePolicy(PolicyType policyType, BigDecimal... updatedDiscountPolicyValues) {
         if (updatedDiscountPolicyValues.length > 2)
             throw new IllegalArgumentException("Too many numeric values provided for update of Policy");
 
         DiscountPolicy discountPolicy = discountPolicyMap.get(policyType);
 
-        switch (discountPolicy) {
+        //Switch case with pattern matching available only in preview
+        /*
+        return switch (discountPolicy) {
             case AmountBasedDiscountPolicy policy ->
                     updateAmountBasedPolicy(policy, updatedDiscountPolicyValues);
             case PercentageBasedDiscountPolicy policy ->
                     updatePercentageBasedPolicy(policy, updatedDiscountPolicyValues);
             default ->
                     throw new IllegalStateException("Unexpected value: " + discountPolicy.getType());
+        };
+        */
+        // Using standard LTS version instead forcing usage of "instanceof"
+
+        if (discountPolicy instanceof AmountBasedDiscountPolicy) {
+            return updateAmountBasedPolicy((AmountBasedDiscountPolicy) discountPolicy, updatedDiscountPolicyValues);
+        } else if (discountPolicy instanceof PercentageBasedDiscountPolicy) {
+            return updatePercentageBasedPolicy((PercentageBasedDiscountPolicy) discountPolicy, updatedDiscountPolicyValues);
+        } else {
+            log.error("unexpected value: " + discountPolicy.getType());
+            throw new IllegalStateException("Unexpected value: " + discountPolicy.getType());
         }
     }
 
-    private static void updatePercentageBasedPolicy(PercentageBasedDiscountPolicy policy,
+    private DiscountPolicy updatePercentageBasedPolicy(PercentageBasedDiscountPolicy policy,
                                                     BigDecimal[] updatedDiscountPolicyValues) {
 
         policy.setPercentageDiscount(updatedDiscountPolicyValues[0]);
 
         discountPolicyMap.put(PolicyType.PERCENTAGE_BASED, policy);
+
+        log.info("""
+                New values for percentage based discount have been set.
+                Percacentage based: discount = 
+                """ + updatedDiscountPolicyValues[0]);
+
+        return policy;
     }
 
-    private static void updateAmountBasedPolicy(AmountBasedDiscountPolicy policy,
+    private DiscountPolicy updateAmountBasedPolicy(AmountBasedDiscountPolicy policy,
                                                 BigDecimal[] updatedDiscountPolicyValues) {
 
         policy.setDiscountPercentageIncreasePerItem(updatedDiscountPolicyValues[1]);
         policy.setMaxDiscount(updatedDiscountPolicyValues[0]);
 
         discountPolicyMap.put(PolicyType.AMOUNT_BASED, policy);
+
+        log.info("""
+                New values for percentage based discount have been set.
+                Amount based: max discount = 
+                """ + updatedDiscountPolicyValues[0] +
+                ", step per item = " + updatedDiscountPolicyValues[1]);
+
+        return policy;
     }
 
 }

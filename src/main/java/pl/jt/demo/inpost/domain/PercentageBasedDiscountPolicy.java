@@ -13,7 +13,10 @@ public class PercentageBasedDiscountPolicy implements DiscountPolicy {
 
     @Override
     public BigDecimal calculateDiscount(BigDecimal itemPrice, int amount) {
-        return BigDecimal.valueOf(amount).multiply(itemPrice).multiply(percentageDiscount).multiply(ONE_PERCENT);
+        return BigDecimal.valueOf(amount)
+                .multiply(itemPrice)
+                .multiply(ONE_HUNDRED.subtract(percentageDiscount))
+                .multiply(ONE_PERCENT);
     }
 
     @Override

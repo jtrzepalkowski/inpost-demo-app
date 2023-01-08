@@ -1,17 +1,22 @@
 package pl.jt.demo.inpost.infra.repository;
 
-import org.springframework.stereotype.Repository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import pl.jt.demo.inpost.domain.Product;
 import pl.jt.demo.inpost.infra.exception.NoSuchProductFoundException;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
+@Component
+@Slf4j
 public class ProductRepository {
 
     private static Map<String, Product> productMap;
@@ -88,9 +93,15 @@ public class ProductRepository {
                         .name("Marker")
                         .pricePerItem(BigDecimal.valueOf(10.50))
                         .build());
+
+        log.info("Initialized product map.");
     }
 
     public Product getProductById(String uuid) throws NoSuchProductFoundException {
         return Optional.ofNullable(productMap.get(uuid)).orElseThrow(() -> new NoSuchProductFoundException(uuid));
+    }
+
+    public List<Product> getAll() {
+        return new ArrayList<>(productMap.values());
     }
 }

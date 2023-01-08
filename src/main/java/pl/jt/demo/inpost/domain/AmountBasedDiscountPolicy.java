@@ -17,7 +17,10 @@ public class AmountBasedDiscountPolicy implements DiscountPolicy {
 
         BigDecimal actualDiscount = discountPercentageIncreasePerItem.multiply(new BigDecimal(amount));
 
-        return BigDecimal.valueOf(amount).multiply(itemPrice).multiply(actualDiscount.min(maxDiscount)).multiply(ONE_PERCENT);
+        return BigDecimal.valueOf(amount)
+                .multiply(itemPrice)
+                .multiply(ONE_HUNDRED.subtract(actualDiscount.min(maxDiscount)))
+                .multiply(ONE_PERCENT);
     }
 
     @Override
