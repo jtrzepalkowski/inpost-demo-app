@@ -12,11 +12,9 @@ mvn clean package
 
 Step 2. Build docker image and run the application in a docker container using provided console command
 ```shell
-(sudo) docker build -t inpost-demo-app:latest . && docker run -p8080:8080 inpost-demo-app:latest
+docker build -t inpost-demo-app:latest . && docker run -p8080:8080 inpost-demo-app:latest
 ```
-NOTE_1: sudo is in brackets and using it depends on you having configured a user for docker with proper permissions on a linux machine
-
-NOTE_2: keep in mind that using the provided command implies the 8080 port is available 
+NOTE_1: keep in mind that using the provided command implies the 8080 port is available 
 
 ## Usage
 You can check what endpoints are available via 

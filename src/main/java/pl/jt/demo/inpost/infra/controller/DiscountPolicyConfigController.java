@@ -1,6 +1,5 @@
 package pl.jt.demo.inpost.infra.controller;
 
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

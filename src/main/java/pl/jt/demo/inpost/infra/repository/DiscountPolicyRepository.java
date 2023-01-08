@@ -49,19 +49,6 @@ public class DiscountPolicyRepository {
 
         DiscountPolicy discountPolicy = discountPolicyMap.get(policyType);
 
-        //Switch case with pattern matching available only in preview
-        /*
-        return switch (discountPolicy) {
-            case AmountBasedDiscountPolicy policy ->
-                    updateAmountBasedPolicy(policy, updatedDiscountPolicyValues);
-            case PercentageBasedDiscountPolicy policy ->
-                    updatePercentageBasedPolicy(policy, updatedDiscountPolicyValues);
-            default ->
-                    throw new IllegalStateException("Unexpected value: " + discountPolicy.getType());
-        };
-        */
-        // Using standard LTS version instead forcing usage of "instanceof"
-
         if (discountPolicy instanceof AmountBasedDiscountPolicy) {
             return updateAmountBasedPolicy((AmountBasedDiscountPolicy) discountPolicy, updatedDiscountPolicyValues);
         } else if (discountPolicy instanceof PercentageBasedDiscountPolicy) {
