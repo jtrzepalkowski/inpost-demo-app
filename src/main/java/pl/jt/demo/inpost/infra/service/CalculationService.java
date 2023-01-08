@@ -12,12 +12,15 @@ import pl.jt.demo.inpost.infra.repository.ProductRepository;
 import pl.jt.demo.inpost.infra.response.CalculationResponse;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 @Service
 public class CalculationService {
 
     private final DiscountPolicyRepository discountPolicyRepository;
     private final ProductRepository productRepository;
+
+    private final static DecimalFormat PRICE_FORMAT = new DecimalFormat("0.00");
 
     CalculationService(final DiscountPolicyRepository discountPolicyRepository,
                        final ProductRepository productRepository) {
@@ -41,7 +44,7 @@ public class CalculationService {
                 .amountOfProduct(numericAmount)
                 .discountPolicy(policyTypeFromRequest)
                 .productName(product.getName())
-                .finalPrice(discountPolicy.calculateDiscount(product.getPricePerItem(), numericAmount).toString())
+                .finalPrice(PRICE_FORMAT.format(discountPolicy.calculateDiscount(product.getPricePerItem(), numericAmount)))
                 .build();
     }
 
@@ -55,7 +58,7 @@ public class CalculationService {
         return CalculationResponse.builder()
                 .amountOfProduct(numericAmount)
                 .productName(product.getName())
-                .finalPrice(product.getPricePerItem().multiply(BigDecimal.valueOf(numericAmount)).toString())
+                .finalPrice(PRICE_FORMAT.format(product.getPricePerItem().multiply(BigDecimal.valueOf(numericAmount))))
                 .build();
     }
 
@@ -64,6 +67,7 @@ public class CalculationService {
 
         try {
             numericAmount = Integer.parseInt(amount);
+            if (numericAmount < 1) throw new InvalidValueProvidedException(amount);
         } catch (NumberFormatException e) {
             throw new InvalidValueProvidedException(amount);
         }

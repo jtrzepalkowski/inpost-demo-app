@@ -37,3 +37,9 @@ Below list of assumptions that were taken into consideration during development:
 2. Discount policies will not hold new values after restart
 3. Usage of only one discount policy is permitted per calculation
 4. Amount based discount policy has a configurable threshold of the maximum percentage discount
+
+
+## Additional Info
+- Approach chosen: Medium (change policy in runtime - available only for admin user, no external database)
+- Time of development: approx. 16-20 hrs
+- Test coverage for lines: approx. 86%

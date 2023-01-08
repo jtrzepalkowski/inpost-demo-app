@@ -12,6 +12,7 @@ import pl.jt.demo.inpost.infra.exception.NoSuchProductFoundException;
 import pl.jt.demo.inpost.infra.repository.ProductRepository;
 import pl.jt.demo.inpost.infra.response.CalculationResponse;
 import pl.jt.demo.inpost.infra.service.CalculationService;
+import pl.jt.demo.inpost.infra.service.ProductService;
 
 import java.util.List;
 
@@ -19,15 +20,15 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    ProductController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    ProductController(final ProductService productService) {
+        this.productService = productService;
     }
 
     @GetMapping("/show-all")
     public List<Product> calculateFinalPrice() {
-        return productRepository.getAll();
+        return productService.retrieveAll();
     }
 
 }

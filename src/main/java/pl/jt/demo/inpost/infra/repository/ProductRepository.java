@@ -8,7 +8,6 @@ import pl.jt.demo.inpost.infra.exception.NoSuchProductFoundException;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +76,7 @@ public class ProductRepository {
                 Product.builder()
                         .id(UUID.fromString("af40fe45-5d1b-4ce4-bbb4-4d5e485b3134"))
                         .name("Pencil")
-                        .pricePerItem(BigDecimal.valueOf(2.10))
+                        .pricePerItem(BigDecimal.valueOf(2.00))
                         .build());
 
         productMap.put("cb7c2460-98c7-4739-a4df-5e24af504bb5",
