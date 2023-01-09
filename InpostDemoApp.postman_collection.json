@@ -8,8 +8,30 @@
 		{
 			"name": "Calculate",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/calculate/7b3720e7-432d-4213-8a4b-98fed0ccae22/5?discount-policy=amount-based",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"calculate",
+						"7b3720e7-432d-4213-8a4b-98fed0ccae22",
+						"5"
+					],
+					"query": [
+						{
+							"key": "discount-policy",
+							"value": "amount-based"
+						}
+					]
+				}
 			},
 			"response": []
 		},
@@ -17,15 +39,65 @@
 			"name": "List all Products",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/products/show-all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"show-all"
+					]
+				}
 			},
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "Update discount policy",
 			"request": {
-				"method": "GET",
-				"header": []
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/admin/update/amount-based?maxDiscount=50&discountIncreasePerItem=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"update",
+						"amount-based"
+					],
+					"query": [
+						{
+							"key": "maxDiscount",
+							"value": "50"
+						},
+						{
+							"key": "discountIncreasePerItem",
+							"value": "5"
+						}
+					]
+				}
 			},
 			"response": []
 		}
