@@ -19,7 +19,7 @@ public class ProductController {
     }
 
     @GetMapping("/show-all")
-    public List<Product> calculateFinalPrice() {
+    public List<Product> fetchAllProducts() {
         return productService.retrieveAll();
     }
 
