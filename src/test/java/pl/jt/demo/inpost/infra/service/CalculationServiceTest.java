@@ -1,6 +1,5 @@
 package pl.jt.demo.inpost.infra.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ class CalculationServiceTest {
 
     private static final String PERCENTAGE_BASED_NAME_STRING = "percentage-based";
 
+    private static final String NO_DISCOUNT_NAME_STRING = "no-discount";
 
     @Test
     void getDiscountPolicyAndCalculateWithAmountBasedPolicy()
@@ -34,7 +34,7 @@ class CalculationServiceTest {
         String amount = "8";
 
         //when
-        CalculationResponse result = calculationService.getDiscountPolicyAndCalculate(
+        CalculationResponse result = calculationService.calculateWithGivenDiscountPolicy(
                 AMOUNT_BASED_NAME_STRING,
                 productId,
                 amount
@@ -57,7 +57,7 @@ class CalculationServiceTest {
         String amount = "10";
 
         //when
-        CalculationResponse result = calculationService.getDiscountPolicyAndCalculate(
+        CalculationResponse result = calculationService.calculateWithGivenDiscountPolicy(
                 PERCENTAGE_BASED_NAME_STRING,
                 productId,
                 amount
@@ -79,7 +79,7 @@ class CalculationServiceTest {
         String amount = "100";
 
         //when
-        CalculationResponse result = calculationService.getDiscountPolicyAndCalculate(
+        CalculationResponse result = calculationService.calculateWithGivenDiscountPolicy(
                 AMOUNT_BASED_NAME_STRING,
                 productId,
                 amount
@@ -94,20 +94,20 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateWithoutDiscount() throws NoSuchProductFoundException, InvalidValueProvidedException {
+    void calculateWithoutDiscount() throws NoSuchProductFoundException, InvalidValueProvidedException, NoSuchDiscountPolicyFoundException {
 
         //given
         String productId = "7b3720e7-432d-4213-8a4b-98fed0ccae22";
         String amount = "2";
 
         //when
-        CalculationResponse result = calculationService.calculateWithoutDiscount(productId, amount);
+        CalculationResponse result = calculationService.calculateWithGivenDiscountPolicy(NO_DISCOUNT_NAME_STRING, productId, amount);
 
         //then
         assertEquals("Calendar", result.getProductName());
         assertEquals("42.74", result.getFinalPrice());
         assertEquals(2, result.getAmountOfProduct());
-        assertNull(result.getDiscountPolicy());
+        assertEquals("no-discount", result.getDiscountPolicy());
     }
 
     @Test
@@ -119,7 +119,7 @@ class CalculationServiceTest {
 
         //when & then
         assertThrows(NoSuchProductFoundException.class,
-                () -> calculationService.calculateWithoutDiscount(productId, amount));
+                () -> calculationService.calculateWithGivenDiscountPolicy(NO_DISCOUNT_NAME_STRING, productId, amount));
     }
 
     @Test
@@ -131,7 +131,7 @@ class CalculationServiceTest {
 
         //when & then
         assertThrows(NoSuchDiscountPolicyFoundException.class,
-                () -> calculationService.getDiscountPolicyAndCalculate("some-policy", productId, amount));
+                () -> calculationService.calculateWithGivenDiscountPolicy("some-policy", productId, amount));
 
     }
 
@@ -144,7 +144,7 @@ class CalculationServiceTest {
 
         //when & then
         assertThrows(InvalidValueProvidedException.class,
-                () -> calculationService.calculateWithoutDiscount(productId, amount));
+                () -> calculationService.calculateWithGivenDiscountPolicy(NO_DISCOUNT_NAME_STRING, productId, amount));
     }
 
     @Test
@@ -156,6 +156,6 @@ class CalculationServiceTest {
 
         //when & then
         assertThrows(InvalidValueProvidedException.class,
-                () -> calculationService.calculateWithoutDiscount(productId, amount));
+                () -> calculationService.calculateWithGivenDiscountPolicy(NO_DISCOUNT_NAME_STRING, productId, amount));
     }
 }

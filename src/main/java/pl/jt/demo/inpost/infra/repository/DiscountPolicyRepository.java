@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import pl.jt.demo.inpost.domain.AmountBasedDiscountPolicy;
 import pl.jt.demo.inpost.domain.DiscountPolicy;
+import pl.jt.demo.inpost.domain.NoDiscountPolicy;
 import pl.jt.demo.inpost.domain.PercentageBasedDiscountPolicy;
 import pl.jt.demo.inpost.domain.PolicyType;
 
@@ -30,6 +31,8 @@ public class DiscountPolicyRepository {
         discountPolicyMap.put(PolicyType.PERCENTAGE_BASED, PercentageBasedDiscountPolicy.builder()
                 .percentageDiscount(BigDecimal.valueOf(20))
                 .build());
+
+        discountPolicyMap.put(PolicyType.NO_DISCOUNT, NoDiscountPolicy.builder().build());
 
         log.info("""
                 Created two discount policies with default values.

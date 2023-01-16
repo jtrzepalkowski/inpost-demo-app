@@ -22,16 +22,13 @@ public class CalculatorController {
     }
 
     @GetMapping("/{productId}/{amount}")
-    public CalculationResponse calculateFinalPrice(@PathVariable String productId,
-                                                   @PathVariable String amount,
-                                                   @RequestParam(value = "discount-policy", required = false) String discountPolicy)
+    public CalculationResponse calculateFinalPrice(@PathVariable String productId, @PathVariable String amount,
+                                                   @RequestParam(value = "discount-policy",
+                                                           required = false,
+                                                           defaultValue = "no-policy") String discountPolicy)
             throws NoSuchProductFoundException, NoSuchDiscountPolicyFoundException, InvalidValueProvidedException {
 
-            if (discountPolicy == null || discountPolicy.isBlank()) {
-                return calculationService.calculateWithoutDiscount(productId, amount);
-            } else {
-                return calculationService.getDiscountPolicyAndCalculate(discountPolicy, productId, amount);
-            }
+        return calculationService.calculateWithGivenDiscountPolicy(discountPolicy, productId, amount);
 
     }
 

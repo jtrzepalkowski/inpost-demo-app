@@ -13,6 +13,8 @@ import pl.jt.demo.inpost.infra.response.CalculationResponse;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 @Service
 public class CalculationService {
@@ -20,7 +22,8 @@ public class CalculationService {
     private final DiscountPolicyRepository discountPolicyRepository;
     private final ProductRepository productRepository;
 
-    private final static DecimalFormat PRICE_FORMAT = new DecimalFormat("0.00");
+    private final static DecimalFormat PRICE_FORMAT = new DecimalFormat("0.00",
+            new DecimalFormatSymbols(Locale.ROOT));
 
     CalculationService(final DiscountPolicyRepository discountPolicyRepository,
                        final ProductRepository productRepository) {
@@ -28,7 +31,7 @@ public class CalculationService {
         this.productRepository = productRepository;
     }
 
-    public CalculationResponse getDiscountPolicyAndCalculate(String policyTypeFromRequest, String productId, String amount)
+    public CalculationResponse calculateWithGivenDiscountPolicy(String policyTypeFromRequest, String productId, String amount)
             throws NoSuchProductFoundException, NoSuchDiscountPolicyFoundException, InvalidValueProvidedException {
 
         int numericAmount = getNumericAmount(amount);
@@ -45,20 +48,6 @@ public class CalculationService {
                 .discountPolicy(policyTypeFromRequest)
                 .productName(product.getName())
                 .finalPrice(PRICE_FORMAT.format(discountPolicy.calculateDiscount(product.getPricePerItem(), numericAmount)))
-                .build();
-    }
-
-    public CalculationResponse calculateWithoutDiscount(String productId, String amount)
-            throws InvalidValueProvidedException, NoSuchProductFoundException {
-
-        int numericAmount = getNumericAmount(amount);
-
-        Product product = productRepository.getProductById(productId);
-
-        return CalculationResponse.builder()
-                .amountOfProduct(numericAmount)
-                .productName(product.getName())
-                .finalPrice(PRICE_FORMAT.format(product.getPricePerItem().multiply(BigDecimal.valueOf(numericAmount))))
                 .build();
     }
 

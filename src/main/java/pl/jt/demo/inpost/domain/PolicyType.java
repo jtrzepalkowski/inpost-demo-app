@@ -6,7 +6,9 @@ import java.util.Optional;
 public enum PolicyType {
 
     AMOUNT_BASED("amount-based"),
-    PERCENTAGE_BASED("percentage-based");
+    PERCENTAGE_BASED("percentage-based"),
+
+    NO_DISCOUNT("no-discount");
 
     private final String stringFromRequest;
 
